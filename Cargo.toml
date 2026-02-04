@@ -1,0 +1,13 @@
+[package]
+name = "mise-shim"
+version = "0.1.0"
+edition = "2024"
+
+[profile.release]
+strip = true      # Automatically strips symbols
+opt-level = "z"   # Optimize for size
+lto = true        # Link Time Optimization (removes unused code)
+codegen-units = 1 # Better optimization, slower build
+panic = "abort"   # Remove unwind error handling code
+
+[dependencies]
