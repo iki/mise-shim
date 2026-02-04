@@ -1,0 +1,1 @@
+@call vc cargo build --release && upx -f --best --ultra-brute -o mise-shim.exe target\release\mise-shim.exe
