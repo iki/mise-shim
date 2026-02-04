@@ -1,18 +1,20 @@
 # mise-shim<!-- omit in toc -->
 
-Executable Windows shim for [mise](https://mise.jdx.dev) tools.
+Executable Windows shim for [mise](https://mise.jdx.dev) tools
 
-Fully usable prove-of-concept, ready for use in local dev env.
+Fully usable prove-of-concept, ready for use in local dev env
 
 Based on [@daief](https://github.com/daief) solution for [node shim issues](https://github.com/jdx/mise/discussions/4773#discussioncomment-13304766)
 
 ## Content<!-- omit in toc -->
 
 - [Purpose](#purpose)
-- [How It Works](#how-it-works)
+- [Concept](#concept)
 - [Getting Started](#getting-started)
-- [Build the shim](#build-the-shim)
 - [Usage](#usage)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+  - [Build](#build)
 - [Technical Details](#technical-details)
 - [License](#license)
 
@@ -25,9 +27,9 @@ Current cmd/bash shims in mise have several issues:
 - Calling tools from cmd scripts has to be updated to use `call` to work with cmd/bash shims, otherwise the script will exit after the tool is called
 - There may be many other cases where the tool executables are expected to be in PATH, which is their default installation mode
 
-Executable shims are battle tested practice on Windows. They are used for example by [Bun](https://github.com/oven-sh/bun/blob/main/src/install/windows-shim/bun_shim_impl.zig), [Volta](https://github.com/volta-cli/volta/issues/1135#issuecomment-1016790857), and [Chocolatey](https://docs.chocolatey.org/en-us/features/shim/).
+Executable shims are battle tested practice on Windows. They are used for example by [Bun](https://github.com/oven-sh/bun/blob/main/src/install/windows-shim/bun_shim_impl.zig), [Volta](https://github.com/volta-cli/volta/issues/1135#issuecomment-1016790857), and [Chocolatey](https://docs.chocolatey.org/en-us/features/shim/)
 
-## How It Works
+## Concept
 
 The shim uses its own filename (without `.exe`) to determine which tool to execute:
 
@@ -37,38 +39,10 @@ The shim uses its own filename (without `.exe`) to determine which tool to execu
 
 ## Getting Started
 
-1. **Install [Rust](https://www.rust-lang.org/tools/install) and [UPX](https://upx.github.io) via mise**:
-
-   ```cmd
-   mise use -g rust upx
-   ```
-
-2. **Install [Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)**:
-
-   **Option A: Using [Chocolatey](https://community.chocolatey.org/packages/visualstudio2026-workload-vctools)** (recommended):
-
-   ```cmd
-   choco install visualstudio2022-workload-vctools --package-parameters "--includeRecommended"
-   ```
-
-   **Option B: Manual installation**:
-   - Download from: https://aka.ms/vs/stable/vs_BuildTools.exe
-   - Run the installer and select "Desktop development with C++"
-
-## Build the shim
-
-Run the [`build.cmd`](./build.cmd) script:
-
-```cmd
-build.cmd
-```
-
-Build script will perform the following steps:
-
-1. Initialize the Visual Studio build environment using [vc.cmd](./vc.cmd)
-2. Compile the Rust code in size-optimized portable [release mode](./Cargo.toml)
-3. Compress the executable with [UPX](https://upx.github.io)
-4. Output the final `mise-shim.exe`
+1. Download [`reshim.cmd`](./reshim.cmd)
+   - Alternatively, clone this repository for building from source
+2. Download [`mise-shim.exe`](https://github.com/iki/mise-shim/releases/latest/download/mise-shim.exe) from the [latest release](https://github.com/jdx/mise-shim/releases/latest)
+   - Alternatively, [build](#build) the shim from source
 
 ## Usage
 
@@ -96,9 +70,46 @@ Remove all existing .exe shims in mise shim-path
 that do not have matching .cmd shim there (were uninstalled)
 
 Options:
-  -f       Overwrite existing .exe shims. Use after rebuild.
+  -f       Overwrite existing .exe shims. Use after rebuild
   -h       Show this help and exit
 ```
+
+## Development
+
+### Prerequisites
+
+1. **Install [Rust](https://www.rust-lang.org/tools/install) and [UPX](https://upx.github.io) via mise**:
+
+   ```cmd
+   mise use -g rust upx
+   ```
+
+2. **Install [Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)**:
+
+   **Option A: Using [Chocolatey](https://community.chocolatey.org/packages/visualstudio2026-workload-vctools)** (recommended):
+
+   ```cmd
+   choco install visualstudio2022-workload-vctools --package-parameters "--includeRecommended"
+   ```
+
+   **Option B: Manual installation**:
+   - Download https://aka.ms/vs/stable/vs_BuildTools.exe
+   - Run the installer and select "Desktop development with C++"
+
+### Build
+
+Run the [`build.cmd`](./build.cmd) script:
+
+```cmd
+build.cmd
+```
+
+Build script will perform the following steps:
+
+1. Initialize the Visual Studio build environment using [vc.cmd](./vc.cmd)
+2. Compile the Rust code in size-optimized portable [release mode](./Cargo.toml)
+3. Compress the executable with [UPX](https://upx.github.io)
+4. Output the final [`mise-shim.exe`](https://github.com/iki/mise-shim/releases/latest/download/mise-shim.exe)
 
 ## Technical Details
 

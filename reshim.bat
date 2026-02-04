@@ -7,7 +7,7 @@
 ::|that do not have matching .cmd shim there (were uninstalled)
 ::|
 ::|Options:
-::|  -f       Overwrite existing .exe shims. Use after rebuild.
+::|  -f       Overwrite existing .exe shims. Use after rebuild
 ::|  -h       Show this help and exit.
 ::|
 @echo off
